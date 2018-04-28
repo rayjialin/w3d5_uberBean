@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIKit/UIKit.h"
 
 @interface NetworkManager : NSObject
 -(void)handleNetworkRequest:(NSString *)urlString completion:(void(^)(NSArray *jsonArray))completed;
+-(void)processImageDownload:(NSString *)imageName completion:(void(^)(UIImage *image))completed;
 @end

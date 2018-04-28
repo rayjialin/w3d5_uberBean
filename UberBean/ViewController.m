@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "Cafe.h"
 #import "NetworkManager.h"
+#import "CafeDetailViewController.h"
 
 @interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (nonatomic) CLLocationManager *locationManager;
@@ -34,11 +35,19 @@
     NetworkManager *networkManager = [NetworkManager new];
     [networkManager handleNetworkRequest:@"https://api.yelp.com/v3/businesses/search?term=cafe&latitude=49.281815&longitude=-123.108414" completion:^(NSArray *jsonArray) {
         for (NSDictionary *cafeDict in jsonArray){
-//            Cafe *cafe = [[Cafe alloc] initWithDictionary:cafeDict];
+
+            NSString *rating = [NSString new];
+            NSInteger ratingNumber = 0;
+            NSLog(@"%@", cafeDict[@"rating"]);
+            ratingNumber = [cafeDict[@"rating"] integerValue];
+            for (int i = 0; i < ratingNumber; i++){
+                rating = [rating stringByAppendingString:@"⭐"];
+            }
+            
             Cafe *cafe = [[Cafe alloc] initWithCoordinate:CLLocationCoordinate2DMake([cafeDict[@"coordinates"][@"latitude"] doubleValue], [cafeDict[@"coordinates"][@"longitude"] doubleValue])
                                                  andTitle:cafeDict[@"name"]
-                                                 andImage:cafeDict[@"image_url"]
-                                                andRating:cafeDict[@"rating"]];
+                                                andRating:rating];
+            cafe.cafeImageName = cafeDict[@"image_url"];
             [cafeArray addObject:cafe];
         }
         
@@ -79,26 +88,44 @@
     }
 }
 
-//- (nullable MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation{
-//        MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"myId"];
-//    if (!pinView)
-//    {
-//        // If an existing pin view was not available, create one.
-//        pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myId"];
-//        pinView.canShowCallout = NO;
-//        pinView.pinTintColor = [UIColor greenColor];
-//        pinView.image = [UIImage imageNamed:@"foodPin.png"];
-//
-//        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//        pinView.rightCalloutAccessoryView = rightButton;
-//
-//        // Add an image to the left callout.
-//        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"foodPin.png"]];
-//        pinView.leftCalloutAccessoryView = iconView;
-//
-//
-//    }
-//    return pinView;
-//}
+- (nullable MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation{
+    
+    MKMarkerAnnotationView *markerView = (MKMarkerAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"myId"];
+    if (!markerView)
+    {
+        UIView *detailView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
+        markerView.detailCalloutAccessoryView = detailView;
+        
+        // If an existing pin view was not available, create one.
+        markerView = [[MKMarkerAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myId"];
+        markerView.canShowCallout = YES;
+//        markerView.image = [UIImage imageNamed:@"foodPin.png"];
+
+        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        markerView.rightCalloutAccessoryView = rightButton;
+
+        // Add an image to the left callout.
+        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"staff"]];
+        markerView.leftCalloutAccessoryView = iconView;
+
+    }
+    return markerView;
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control{
+
+    Cafe *cafeAnnotation = (Cafe *)view.annotation;
+    [self performSegueWithIdentifier:@"detailCafe" sender:cafeAnnotation];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(Cafe *)cafeAnnotation{
+    if ([[segue identifier] isEqualToString:@"detailCafe"])
+    {
+        // Get reference to the destination view controller
+        CafeDetailViewController *detailVC = [segue destinationViewController];
+        
+        // Pass any objects to the view controller here, like...
+        detailVC.cafeAnnotation = cafeAnnotation;
+    }}
 
 @end

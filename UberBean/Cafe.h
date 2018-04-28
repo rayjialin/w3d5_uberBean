@@ -11,12 +11,9 @@
 
 @interface Cafe : NSObject <MKAnnotation>
 
-@property (nonatomic, nullable, readonly, copy) NSString *cafeTitle;
-@property (nonatomic, nullable, readonly, copy) NSString *cafeImageName;
-//@property (nonatomic) NSString *cafeLatitude;
-//@property (nonatomic) NSString *cafeLongitude;
-@property (nonatomic, nullable, readonly, copy) NSString *cafeRating;
+@property (nonatomic, nullable, readonly, copy) NSString *title;
+@property (nonatomic, nullable) NSString *cafeImageName;
+@property (nonatomic, nullable, readonly, copy) NSString *subtitle;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-//-(instancetype)initWithDictionary:(NSDictionary *)cafeDict;
--(id _Nullable)initWithCoordinate:(CLLocationCoordinate2D)cafeCoordinate andTitle:(NSString * _Nullable)title andImage:(NSString * _Nullable)image andRating:(NSString * _Nullable)rating;
+-(id _Nullable)initWithCoordinate:(CLLocationCoordinate2D)cafeCoordinate andTitle:(NSString * _Nullable)title andRating:(NSString * _Nullable)rating;
 @end
