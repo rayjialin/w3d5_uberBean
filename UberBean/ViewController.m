@@ -8,7 +8,10 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
+@property (nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) CLLocation *location;
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
 
 @end
 
@@ -16,13 +19,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.mapView.delegate = self;
+    self.locationManager.delegate = self;
+    self.mapView.mapType = MKMapTypeStandard;
+    self.locationManager = [CLLocationManager new];
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+    
 }
 
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation{
+    NSLog(@"lkasjdf");
+    MKCoordinateRegion myRegion;
+    
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
+    
+    myRegion.span = MKCoordinateSpanMake(0.006, 0.006);
+    myRegion.center = center;
+    
+    [self.mapView setRegion:myRegion animated:true];
+    
+}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    self.location = [locations firstObject];
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error{
+    NSLog(@"%@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways){
+        [self.locationManager requestLocation];
+    }
 }
 
 
