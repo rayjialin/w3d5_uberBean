@@ -34,9 +34,17 @@
     NetworkManager *networkManager = [NetworkManager new];
     [networkManager handleNetworkRequest:@"https://api.yelp.com/v3/businesses/search?term=cafe&latitude=49.281815&longitude=-123.108414" completion:^(NSArray *jsonArray) {
         for (NSDictionary *cafeDict in jsonArray){
-            Cafe *cafe = [[Cafe alloc] initWithDictionary:cafeDict];
+//            Cafe *cafe = [[Cafe alloc] initWithDictionary:cafeDict];
+            Cafe *cafe = [[Cafe alloc] initWithCoordinate:CLLocationCoordinate2DMake([cafeDict[@"coordinates"][@"latitude"] doubleValue], [cafeDict[@"coordinates"][@"longitude"] doubleValue])
+                                                 andTitle:cafeDict[@"name"]
+                                                 andImage:cafeDict[@"image_url"]
+                                                andRating:cafeDict[@"rating"]];
             [cafeArray addObject:cafe];
         }
+        
+        // add annotations
+        [self.mapView addAnnotations:cafeArray];
+        [self.mapView showAnnotations:cafeArray animated:TRUE];
     }];
     
 }
@@ -71,5 +79,26 @@
     }
 }
 
+//- (nullable MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation{
+//        MKPinAnnotationView *pinView = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"myId"];
+//    if (!pinView)
+//    {
+//        // If an existing pin view was not available, create one.
+//        pinView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myId"];
+//        pinView.canShowCallout = NO;
+//        pinView.pinTintColor = [UIColor greenColor];
+//        pinView.image = [UIImage imageNamed:@"foodPin.png"];
+//
+//        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+//        pinView.rightCalloutAccessoryView = rightButton;
+//
+//        // Add an image to the left callout.
+//        UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"foodPin.png"]];
+//        pinView.leftCalloutAccessoryView = iconView;
+//
+//
+//    }
+//    return pinView;
+//}
 
 @end

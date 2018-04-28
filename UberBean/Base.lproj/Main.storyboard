@@ -18,15 +18,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PxS-V8-9ok">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PxS-V8-9ok">
                                 <rect key="frame" x="0.0" y="32" width="375" height="331"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="q8s-Gv-K1p"/>
                                 </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="PxS-V8-9ok" secondAttribute="bottom" id="27J-qb-Syq"/>
+                            <constraint firstItem="PxS-V8-9ok" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3iP-sL-0qf"/>
+                            <constraint firstItem="PxS-V8-9ok" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="HlT-GT-303"/>
+                            <constraint firstItem="PxS-V8-9ok" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="l28-pW-OJ0"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>

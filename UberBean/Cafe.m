@@ -10,16 +10,30 @@
 
 @implementation Cafe
 
--(instancetype)initWithDictionary:(NSDictionary *)cafeDict{
+//-(instancetype)initWithDictionary:(NSDictionary *)cafeDict{
+//    self = [super init];
+//    if (self) {
+//        _cafeTitle = cafeDict[@"name"];
+//        _cafeImageName = cafeDict[@"image_url"];
+//        _cafeLatitude = cafeDict[@"coordinates"][@"latitude"];
+//        _cafeLongitude = cafeDict[@"coordinates"][@"longitude"];
+//        _cafeRating = cafeDict[@"rating"];
+//
+//    }
+//    return self;
+//}
+
+-(id _Nullable)initWithCoordinate:(CLLocationCoordinate2D)cafeCoordinate andTitle:(NSString * _Nullable)title andImage:(NSString * _Nullable)image andRating:(NSString * _Nullable)rating{
     self = [super init];
     if (self) {
-        _cafeTitle = cafeDict[@"name"];
-        _cafeImageName = cafeDict[@"image_url"];
-        _cafeLatitude = cafeDict[@"coordinates"][@"latitude"];
-        _cafeLongitude = cafeDict[@"coordinates"][@"longitude"];
-        _cafeRating = cafeDict[@"rating"];
-
+        _coordinate = cafeCoordinate;
+        _cafeTitle = title;
+        _cafeImageName = image;
+        _cafeRating = rating;
+        
     }
+    
+    
     return self;
 }
 
