@@ -7,11 +7,14 @@
 //
 
 #import "ViewController.h"
+#import "Cafe.h"
+#import "NetworkManager.h"
 
 @interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) CLLocation *location;
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
+//@property (nonatomic) NetworkManager *networkManager;
 
 @end
 
@@ -26,6 +29,15 @@
     self.locationManager = [CLLocationManager new];
     [self.locationManager requestAlwaysAuthorization];
     [self.locationManager startUpdatingLocation];
+    
+    NSMutableArray *cafeArray = [NSMutableArray new];
+    NetworkManager *networkManager = [NetworkManager new];
+    [networkManager handleNetworkRequest:@"https://api.yelp.com/v3/businesses/search?term=cafe&latitude=49.281815&longitude=-123.108414" completion:^(NSArray *jsonArray) {
+        for (NSDictionary *cafeDict in jsonArray){
+            Cafe *cafe = [[Cafe alloc] initWithDictionary:cafeDict];
+            [cafeArray addObject:cafe];
+        }
+    }];
     
 }
 
